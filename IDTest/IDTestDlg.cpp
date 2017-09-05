@@ -206,11 +206,17 @@ void CIDTestDlg::OnBnClickedReadId()
 
 void CIDTestDlg::OnBnClickedReadIdcard()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	IDCARD id;
+	if (!reader.ReadIDCard(&id) ) {
+		AfxMessageBox("读身份证全信息失败");
+		return;
+	}
+
+	AfxMessageBox("读身份证全信息成功");
 }
 
 void CIDTestDlg::OnBnClickedClosePort()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	
 }
 

@@ -1,5 +1,5 @@
-#ifndef _SERIAL_COM_H
-#define _SERIAL_COM_H
+#ifndef _SERIAL_COM_H_
+#define _SERIAL_COM_H_
 
 #include <string>
 #include <boost/asio.hpp>

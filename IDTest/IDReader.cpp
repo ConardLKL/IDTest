@@ -40,7 +40,7 @@ bool IDReader::ReadIDNo(char* idno, int* len)
 	
 	char data_len_buf[2] = { 0x00, 0x03 };
 
-	char data[3] = { 0xCA, 0x01, 0x01 };
+	char data[3] = { 0xCA, 0x01, 0x02 };
 	
 
 	char lrc = 0x00;
@@ -93,6 +93,83 @@ bool IDReader::ReadIDNo(char* idno, int* len)
 
 	*len = 36;
 	memcpy(idno, recv_buf + 5, *len);
+
+	return true;
+}
+
+bool IDReader::ReadIDCard(IDCARD* id) {
+	char send_buf[8] = { 0x00 };
+
+	char begin = 0x02;
+
+
+	char data_len_buf[2] = { 0x00, 0x03 };
+
+	char data[3] = { 0xCA, 0x01, 0x00 };
+
+
+	char lrc = 0x00;
+	char end = 0x03;
+
+
+	int pos = 0;
+	memcpy(send_buf + pos, &begin, 1);
+	pos += 1;
+
+	memcpy(send_buf + pos, data_len_buf, 2);
+	pos += 2;
+
+	memcpy(send_buf + pos, data, sizeof(data));
+	pos += sizeof(data);
+
+	lrc = calc_lrc((unsigned char*)data, sizeof(data));
+	memcpy(send_buf + pos, &lrc, 1);
+	pos += 1;
+
+	memcpy(send_buf + pos, &end, 1);
+
+	if (!com.Send((unsigned char*)send_buf, sizeof(send_buf)))
+		return false;
+
+	char recv_buf[2048] = { 0x00 };
+	int actual_len = 0;
+
+	// 先接收前5个字节
+	if (!com.Recv((unsigned char*)recv_buf, pkglen, &actual_len)) {
+		return false;
+	}
+
+
+	short data_len = 0;
+	memcpy(&data_len, recv_buf + 1, 2);
+	data_len = htons(data_len);
+
+	short status = 0;
+	memcpy(&status, recv_buf + 3, 2);
+	status = htons(status);
+	if (status != 0x9000) {
+
+	}
+
+	// 2代表lrc + end
+	if (!com.Recv((unsigned char*)recv_buf + pkglen, (int)data_len, &actual_len)) {
+		return false;
+	}
+
+	//文字信息长度
+	short text_len = 0;
+	memcpy(&text_len, recv_buf, 2);
+
+	//身份证图像信息长度
+	short image_len = 0;
+	memcpy(&image_len, recv_buf + 2, 2);
+
+	pos = 4;
+	memcpy(id->name, recv_buf + pos, sizeof(id->name));
+	pos += sizeof(id->name);
+
+	memcpy(id->gender, recv_buf + pos, sizeof(id->gender));
+
 
 	return true;
 }
