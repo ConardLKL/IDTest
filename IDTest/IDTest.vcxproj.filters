@@ -13,25 +13,43 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="串口通讯">
+      <UniqueIdentifier>{0aa9ef9e-131a-406d-ae4e-4df295a49adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="身份证业务">
+      <UniqueIdentifier>{12a8b9f8-51ed-4b96-a673-20c4aeb4eba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="文档">
+      <UniqueIdentifier>{a46d8cc9-f97a-45da-b49f-d68c7af4088e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="串口调试工具.txt">
+      <Filter>文档</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IDTest.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="IDTestDlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IDTestDlg.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IDTest.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SerialCom.h">
+      <Filter>串口通讯</Filter>
+    </ClInclude>
+    <ClInclude Include="IDReader.h">
+      <Filter>身份证业务</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +62,12 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SerialCom.cpp">
+      <Filter>串口通讯</Filter>
+    </ClCompile>
+    <ClCompile Include="IDReader.cpp">
+      <Filter>身份证业务</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="IDTest.rc">
@@ -53,6 +77,9 @@
   <ItemGroup>
     <None Include="res\IDTest.rc2">
       <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\doc\sam.doc">
+      <Filter>文档</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

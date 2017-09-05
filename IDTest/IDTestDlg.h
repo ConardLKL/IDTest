@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "IDReader.h"
 
 // CIDTestDlg ¶Ô»°¿ò
 class CIDTestDlg : public CDialogEx
@@ -30,4 +31,21 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	
+
+private:
+	
+
+	
+	IDReader reader;
+	
+
+public:
+	afx_msg void OnBnClickedLoadDll();
+	afx_msg void OnBnClickedReadId();
+	
+	
+
+	
 };
