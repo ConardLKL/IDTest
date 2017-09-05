@@ -42,10 +42,11 @@ private:
 	
 
 public:
-	afx_msg void OnBnClickedLoadDll();
-	afx_msg void OnBnClickedReadId();
-	
-	
 
+	afx_msg void OnBnClickedOpenPort(); 
 	
+	afx_msg void OnBnClickedReadId();
+
+	afx_msg void OnBnClickedReadIdcard();
+	afx_msg void OnBnClickedClosePort();
 };
