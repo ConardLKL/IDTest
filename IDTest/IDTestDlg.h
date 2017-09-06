@@ -5,6 +5,7 @@
 #pragma once
 
 #include "IDReader.h"
+#include "afxwin.h"
 
 // CIDTestDlg ¶Ô»°¿ò
 class CIDTestDlg : public CDialogEx
@@ -49,4 +50,5 @@ public:
 
 	afx_msg void OnBnClickedReadIdcard();
 	afx_msg void OnBnClickedClosePort();
+	CStatic m_image;
 };

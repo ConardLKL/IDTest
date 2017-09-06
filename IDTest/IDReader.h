@@ -15,6 +15,8 @@ typedef struct idcard {
 	char expire_begin[16];
 	char expire_end[16];
 	char address_new[70];
+	char reserved[34];
+	//以上必须是256字节
 
 	char image[1024];
 }IDCARD;

@@ -51,6 +51,9 @@
     <ClInclude Include="IDReader.h">
       <Filter>身份证业务</Filter>
     </ClInclude>
+    <ClInclude Include="WltRS.h">
+      <Filter>身份证业务</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IDTest.cpp">
@@ -86,5 +89,10 @@
     <Image Include="res\IDTest.ico">
       <Filter>资源文件</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="WltRS.lib">
+      <Filter>身份证业务</Filter>
+    </Library>
   </ItemGroup>
 </Project>

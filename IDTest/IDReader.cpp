@@ -86,7 +86,7 @@ bool IDReader::ReadIDNo(char* idno, int* len)
 
 	}
 	
-	// 2代表lrc + end
+	
 	if (!com.Recv((unsigned char*)recv_buf + pkglen, (int)data_len, &actual_len)) {
 		return false;
 	}
@@ -129,9 +129,11 @@ bool IDReader::ReadIDCard(IDCARD* id) {
 	memcpy(send_buf + pos, &end, 1);
 
 	if (!com.Send((unsigned char*)send_buf, sizeof(send_buf)))
+	{
 		return false;
+	}
 
-	char recv_buf[2048] = { 0x00 };
+	char recv_buf[1291] = { 0x00 }; //1+2+(2+2+2+256+1024) + 1+ 1=1286+5=1291
 	int actual_len = 0;
 
 	// 先接收前5个字节
@@ -143,6 +145,7 @@ bool IDReader::ReadIDCard(IDCARD* id) {
 	short data_len = 0;
 	memcpy(&data_len, recv_buf + 1, 2);
 	data_len = htons(data_len);
+	TRACE("总长度%d\n", data_len);
 
 	short status = 0;
 	memcpy(&status, recv_buf + 3, 2);
@@ -158,17 +161,25 @@ bool IDReader::ReadIDCard(IDCARD* id) {
 
 	//文字信息长度
 	short text_len = 0;
-	memcpy(&text_len, recv_buf, 2);
+	memcpy(&text_len, recv_buf + pkglen, 2);
+	text_len = htons(text_len);
+	TRACE("文字信息长度%d\n", text_len);
 
 	//身份证图像信息长度
 	short image_len = 0;
-	memcpy(&image_len, recv_buf + 2, 2);
+	memcpy(&image_len, recv_buf + pkglen + 2, 2);
+	image_len = htons(image_len);
+	TRACE("图像信息长度%d\n", image_len);
 
-	pos = 4;
-	memcpy(id->name, recv_buf + pos, sizeof(id->name));
-	pos += sizeof(id->name);
+	pos = pkglen + 2 + 2;//1字节头 + 2字节长度 + (2字节状态码 +  2字节文本信息长度 + 2字节图像信息长度)
+	memcpy(id, recv_buf + pos, text_len);
+	pos += text_len;
+	
+	char image_buf[1024] = { 0 };
+	memcpy(image_buf, recv_buf + pos, 1024);
+	memcpy(id->image, image_buf, 1024);
 
-	memcpy(id->gender, recv_buf + pos, sizeof(id->gender));
+	
 
 
 	return true;

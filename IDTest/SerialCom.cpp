@@ -68,14 +68,21 @@ bool SerialCom::Recv(unsigned char* data, int need_read, int* actual_read) {
 	if (data == NULL || need_read <= 0)
 		return false;
 
-	//boost::asio::read_until();
 	
-	*actual_read = serial->read_some(boost::asio::buffer(data, need_read), ec);
+	*actual_read = 0;
+	do {
+		int byte_transfered = serial->read_some(boost::asio::buffer(data + *actual_read, need_read - *actual_read), ec);
+		if (ec) {
+			TRACE("¶Á´®¿ÚÊ§°Ü %s\n", ec.message().c_str());
+			return false;
+		}
 
-	if (ec) {
-		TRACE("¶Á´®¿ÚÊ§°Ü %s\n", ec.message().c_str());
-		return false;
-	}
+		*actual_read += byte_transfered;
+
+	} while (*actual_read != need_read);
+	
+
+	
 
 	if (*actual_read != need_read) {
 		TRACE("¶Á´®¿ÚÊ§°Ü %s\n", ec.message().c_str());

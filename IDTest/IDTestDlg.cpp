@@ -7,6 +7,8 @@
 #include "IDTestDlg.h"
 #include "afxdialogex.h"
 
+#include "WltRS.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +28,7 @@ CIDTestDlg::CIDTestDlg(CWnd* pParent /*=NULL*/)
 void CIDTestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_ID_IMAGE, m_image);
 }
 
 BEGIN_MESSAGE_MAP(CIDTestDlg, CDialogEx)
@@ -145,7 +148,7 @@ void CIDTestDlg::OnBnClickedOpenPort()
 void CIDTestDlg::OnBnClickedReadId()
 {
 
-	char data[50] = { 0 };
+	char data[256] = { 0 };
 	int data_len = 0;
 
 	if (!reader.ReadIDNo(data, &data_len))
@@ -211,8 +214,53 @@ void CIDTestDlg::OnBnClickedReadIdcard()
 		AfxMessageBox("读身份证全信息失败");
 		return;
 	}
+	/*
+	int len = WideCharToMultiByte(CP_ACP, 0, (LPCWCH)id.name, 30, NULL, 0, NULL, NULL);
+	char * name = new char[len];
+	          WideCharToMultiByte(CP_ACP, 0, (LPCWCH)id.name, 30, name, len, NULL, NULL);
+			  */
+	char name[100] = { 0 };
+	WideCharToMultiByte(CP_ACP, 0, (LPCWCH)id.name, sizeof(id.name), name, sizeof(id.name)/2, NULL, NULL);
 
-	AfxMessageBox("读身份证全信息成功");
+	char idno[100] = { 0 };
+	WideCharToMultiByte(CP_ACP, 0, (LPCWCH)id.idno, sizeof(id.idno), idno, sizeof(id.idno) / 2, NULL, NULL);
+
+	//保存图像
+
+	FILE * f = NULL;
+	if ( (f = fopen("e:\\id.wlt", "wb")) == NULL) {
+		return ;
+		
+	}
+	fwrite(id.image, 1024, 1, f);
+	fclose(f);
+
+	//转换图像
+	/*
+	1	相片解码解码正确
+	0	调用sdtapi.dll错误
+	-1	相片解码错误
+	-2	wlt文件后缀错误
+	-3	wlt文件打开错误
+	-4	wlt文件格式错误
+	-5	软件未授权
+	-6	设备连接错误
+	*/
+	int rc  = GetBmp("e:\\id.wlt", 0);
+	if (rc != 1) {
+		TRACE("GetBmp fail \n");
+	}
+
+
+	//显示图像
+	HBITMAP m_hBitmap;
+	m_hBitmap = (HBITMAP)::LoadImage(NULL, "e:\\id.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+
+	m_image.SetBitmap(m_hBitmap);
+
+	CString msg;
+	msg.Format("姓名:%s, 身份证号码:%s", name, idno);
+	AfxMessageBox(msg);
 }
 
 void CIDTestDlg::OnBnClickedClosePort()
