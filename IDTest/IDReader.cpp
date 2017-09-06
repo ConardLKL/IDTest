@@ -172,12 +172,12 @@ bool IDReader::ReadIDCard(IDCARD* id) {
 	TRACE("图像信息长度%d\n", image_len);
 
 	pos = pkglen + 2 + 2;//1字节头 + 2字节长度 + (2字节状态码 +  2字节文本信息长度 + 2字节图像信息长度)
-	memcpy(id, recv_buf + pos, text_len);
-	pos += text_len;
+	memcpy(id, recv_buf + pos, text_len + image_len);
+	//pos += text_len;
 	
-	char image_buf[1024] = { 0 };
-	memcpy(image_buf, recv_buf + pos, 1024);
-	memcpy(id->image, image_buf, 1024);
+	//char image_buf[1024] = { 0 };
+	//memcpy(image_buf, recv_buf + pos, 1024);
+	//memcpy(id->image, image_buf, 1024);
 
 	
 
